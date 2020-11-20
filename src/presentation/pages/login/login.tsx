@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react'
 import Styles from './login-styles.scss'
 import { Header, Footer, Input, FormStatus } from '@/presentation/components'
 import Context from '@/presentation/contexts/form/form-context'
-import { stringify } from 'querystring'
 import { Validation } from '@/presentation/protocols/validations'
 
 type Props = {
   validation: Validation
-}
+};
 
 const Login: React.FC<Props> = ({ validation }: Props) => {
   const [state, setState] = useState({
@@ -20,11 +19,11 @@ const Login: React.FC<Props> = ({ validation }: Props) => {
   })
 
   useEffect(() => {
-    validation.validate({ email: state.email })
+    validation.validate('email', state.email)
   }, [state.email])
 
   useEffect(() => {
-    validation.validate({ password: state.password })
+    validation.validate('password', state.password)
   }, [state.password])
 
   return (
