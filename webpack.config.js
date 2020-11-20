@@ -40,7 +40,12 @@ module.exports = {
   devServer: {
     contentBase: './public',
     writeToDisk: true,
-    historyApiFallback: true
+    historyApiFallback: true,
+    open: true,
+    onListening: function(server) {
+      const port = server.listeningApp.address().port
+      console.log(`Listening on port ${port}`)
+    }
   },
   externals: {
     react: 'React',
