@@ -4,21 +4,21 @@ import { Header, Footer, Input, FormStatus } from '@/presentation/components'
 import Context from '@/presentation/contexts/form/form-context'
 import { stringify } from 'querystring'
 
-type StateProps = {
-  isLoading: boolean
-  errorMessage: string
-}
-
 const Login: React.FC = () => {
-  const [state] = useState<StateProps>({
-    isLoading: false,
-    errorMessage: ''
+  const [state] = useState({
+    isLoading: false
+  })
+
+  const [errorState] = useState({
+    email: 'Campo obrigatório',
+    password: 'Campo obrigatório',
+    main: ''
   })
 
   return (
     <div className={Styles.login}>
       <Header />
-      <Context.Provider value={state} >
+      <Context.Provider value={{ state, errorState }}>
         <form className={Styles.form}>
           <h2>Login</h2>
 
@@ -33,8 +33,13 @@ const Login: React.FC = () => {
             name='password'
             placeholder='Digite sua senha'
           />
-          <button disabled data-testid="submit" className={Styles.submit} type='submit'>
-					Entrar
+          <button
+            disabled
+            data-testid='submit'
+            className={Styles.submit}
+            type='submit'
+          >
+						Entrar
           </button>
           <span className={Styles.link}>Criar conta</span>
           <FormStatus />
