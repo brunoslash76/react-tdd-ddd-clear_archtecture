@@ -49,7 +49,7 @@ const populatePasswordlFied = (sut: RenderResult, password = faker.internet.pass
 
 const simulateStatusForField = (sut: RenderResult, fieldName: string, validationError?: string): void => {
   const fieldStatus = sut.getByTestId(`${fieldName}-status`)
-  expect(fieldStatus.title).toBe(validationError || 'Tudo certor!')
+  expect(fieldStatus.title).toBe(validationError || 'Tudo certo!')
   expect(fieldStatus.textContent).toBe(validationError ? '🔴' : '🟢')
 }
 
@@ -118,5 +118,12 @@ describe('Login Component', () => {
       email,
       password
     })
+  })
+
+  test('Should call authentication only once', () => {
+    const { sut, authenticationSpy } = makeSut()
+    simulateValidSubmit(sut)
+    simulateValidSubmit(sut)
+    expect(authenticationSpy.callsCount).toBe(1)
   })
 })
