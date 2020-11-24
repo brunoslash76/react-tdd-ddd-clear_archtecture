@@ -2,7 +2,7 @@ import React from 'react'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
 import 'jest-localstorage-mock'
-import Login from './login'
+import { Login } from '@/presentation/pages'
 import {
   render,
   RenderResult,
