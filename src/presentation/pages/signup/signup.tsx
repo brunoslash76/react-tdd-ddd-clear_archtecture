@@ -5,7 +5,7 @@ import Context from '@/presentation/contexts/form/form-context'
 import { Validation } from '@/presentation/protocols/validations'
 import { AddAccount, SaveAccessToken } from '@/domain/usecases'
 import { stat } from 'fs/promises'
-import { useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 type Props = {
   validation: Validation
@@ -105,7 +105,7 @@ const SingUp: React.FC<Props> = ({ validation, addAccount, saveAccessToken }: Pr
           >
 						Entrar
           </button>
-          <span className={Styles.link}>Voltar para Login</span>
+          <Link to="/login" replace data-testid="login-link" className={Styles.link}>Voltar para Login</Link>
           <FormStatus />
         </form>
       </Context.Provider>
