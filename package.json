@@ -10,6 +10,7 @@
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm test -- --coverage",
     "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info",
+    "test:cypress": "cypress open",
     "check": "npm-check -u -s"
   },
   "keywords": [],
