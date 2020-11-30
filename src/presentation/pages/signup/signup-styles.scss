@@ -25,16 +25,8 @@
             text-transform: uppercase;
         }
 
-        .submit {
+        button {
             margin-top: 48px;
-            &:disabled {
-                background-color: $disabled;
-                cursor: default;
-                color: $disabledColor;
-                &:hover {
-                    opacity: 1;
-                }
-            }
         }
 
         .link {
