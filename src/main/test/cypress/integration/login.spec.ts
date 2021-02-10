@@ -4,6 +4,7 @@ const baseUrl: string = Cypress.config().baseUrl
 
 describe('Login', () => {
   beforeEach(() => {
+    cy.server()
     cy.visit('login')
   })
   it('Should load with correct initial state', () => {
@@ -18,6 +19,14 @@ describe('Login', () => {
   })
 
   it('Should present error state if form is invalid', () => {
+    cy.route({
+      method: 'POST',
+      url: /login/,
+      status: 401,
+      response: {
+        error: faker.random.words()
+      }
+    })
     cy.getByTestId('email').focus().type(faker.random.word())
     cy.getByTestId('email-status')
       .should('have.attr', 'title', 'Valor inválido')
@@ -33,6 +42,14 @@ describe('Login', () => {
   })
 
   it('Should present valid state if form is valid', () => {
+    cy.route({
+      method: 'POST',
+      url: /login/,
+      status: 200,
+      response: {
+        accessToken: faker.random.uuid()
+      }
+    })
     cy.getByTestId('email').focus().type(faker.internet.email())
     cy.getByTestId('email-status')
       .should('have.attr', 'title', 'Tudo certo!')
