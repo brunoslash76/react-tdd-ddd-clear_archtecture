@@ -4,7 +4,7 @@ import {
   testMainError,
   testUrl
 } from '../support/form-helper'
-import { mockEmailInUseError } from '../support/signup-mocks'
+import { mockEmailInUseError, mockUnexpectedError } from '../support/signup-mocks'
 
 const simulateValidSubmit = (): void => {
   cy.getByTestId('name').focus().type(faker.random.alphaNumeric(7))
@@ -60,6 +60,14 @@ describe('SignUp', () => {
     simulateValidSubmit()
     cy.getByTestId('error-wrap')
     testMainError('Esse e-mail já está em uso')
+    testUrl('/signup')
+  })
+
+  it('Should present UnexpectedError on 400', () => {
+    mockUnexpectedError()
+    simulateValidSubmit()
+    cy.getByTestId('error-wrap')
+    testMainError('Algo de errado aconteceu. Tente novamente')
     testUrl('/signup')
   })
 })
