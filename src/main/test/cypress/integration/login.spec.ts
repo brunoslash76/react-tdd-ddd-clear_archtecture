@@ -11,7 +11,7 @@ import {
   mockUnexpectedError,
   mockOk,
   mockInvalidData
-} from './login-mocks'
+} from '../support/login-mocks'
 
 const simulateValidSubmit = (): void => {
   cy.getByTestId('email').focus().type(faker.internet.email())
