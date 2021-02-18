@@ -4,7 +4,7 @@ import {
   testMainError,
   testUrl
 } from '../support/form-helper'
-import { mockEmailInUseError, mockUnexpectedError } from '../support/signup-mocks'
+import { mockEmailInUseError, mockInvalidData, mockUnexpectedError } from '../support/signup-mocks'
 
 const simulateValidSubmit = (): void => {
   cy.getByTestId('name').focus().type(faker.random.alphaNumeric(7))
@@ -67,6 +67,13 @@ describe('SignUp', () => {
     mockUnexpectedError()
     simulateValidSubmit()
     cy.getByTestId('error-wrap')
+    testMainError('Algo de errado aconteceu. Tente novamente')
+    testUrl('/signup')
+  })
+
+  it('Should present UnexpectedError if invalid data is returned', () => {
+    mockInvalidData()
+    simulateValidSubmit()
     testMainError('Algo de errado aconteceu. Tente novamente')
     testUrl('/signup')
   })
