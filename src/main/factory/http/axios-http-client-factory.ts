@@ -1,4 +1,4 @@
-import { AxiosHttpClient } from '@/infra/http/axios-http-client/axio-http-client'
+import { AxiosHttpClient } from '@/infra/http/axios-http-client/axios-http-client'
 import React from 'react'
 
 export const makeAxiosHttpClient = (): AxiosHttpClient => {
