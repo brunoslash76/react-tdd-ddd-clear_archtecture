@@ -54,31 +54,11 @@
                     background-position: 0 0, 54 0;
                     background-size: 54px 100%, 100% 100%;
                     position: relative;
-                    
+
                     .iconWrap {
-                        display: flex;
                         position: absolute;
                         top: -10px;
                         right: -10px;
-                        height: 30px;
-                        width: 30px;
-                        border-radius: 50%;
-                        box-shadow: 0 1px 3px -1px $invalidDark;
-                        justify-content: center;
-                        align-items: center;
-                        
-                        &.red {
-                            background-color: $invalid;
-                        }
-
-                        &.green {
-                            background-color: $valid;
-                        }
-
-                        .icon {
-                            height: 16px;
-                            width: 16px;
-                        }
                     }
                     
                     time {
