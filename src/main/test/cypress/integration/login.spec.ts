@@ -81,7 +81,7 @@ describe('Login', () => {
     cy.getByTestId('main-error').should('not.exist')
     cy.getByTestId('spinner').should('not.exist')
     testUrl('/')
-    testLocalStorageItem('accessToken')
+    testLocalStorageItem('account')
   })
 
   it('Should prevent multiple submits', () => {

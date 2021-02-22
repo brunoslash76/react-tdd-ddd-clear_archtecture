@@ -1,4 +1,4 @@
-export * from './mock-save-access-token'
+export * from './mock-update-current-account'
 export * from './mock-authentication'
 export * from './mock-validation'
 export * as Helper from './form-helper'
