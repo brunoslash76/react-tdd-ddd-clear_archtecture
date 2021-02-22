@@ -10,7 +10,8 @@ const Router: React.FC = () => {
   return (
     <ApiContext.Provider
       value={{
-        setCurrentAccount: setCurrentAccountAdapter
+        setCurrentAccount: setCurrentAccountAdapter,
+        getCurrentAccount: () => ({ accessToken: 'banana', name: 'banana' })
       }}
     >
       <BrowserRouter>
