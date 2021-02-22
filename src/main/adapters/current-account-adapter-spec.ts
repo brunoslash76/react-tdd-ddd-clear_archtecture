@@ -1,12 +1,12 @@
 import { mockAccountModel } from '@/domain/test'
-import { setCurrentAccountAdapter } from './current-account-adapter'
+import { setCurrentAccountAdapter, getCurrentAccountAdapter } from './current-account-adapter'
 import { LocalStorageAdapter } from '@/infra/chache/local-storage-adapter'
 import { UnexpectedError } from '@/domain/errors'
 
 jest.mock('@/infra/chache/local-storage-adapter')
 
 describe('CurrentAccountAdapter', () => {
-  test('Should call LocalStorageAdapter with correct values ', () => {
+  test('Should call LocalStorageAdapter.set with correct values ', () => {
     const account = mockAccountModel()
     const setSpy = jest.spyOn(LocalStorageAdapter.prototype, 'set')
     setCurrentAccountAdapter(account)
@@ -17,5 +17,13 @@ describe('CurrentAccountAdapter', () => {
     expect(() => {
       setCurrentAccountAdapter(undefined)
     }).toThrow(new UnexpectedError())
+  })
+
+  test('Should call LocalStorageAdapter.get with correct value ', () => {
+    const account = mockAccountModel()
+    const getSpy = jest.spyOn(LocalStorageAdapter.prototype, 'get').mockReturnValueOnce(mockAccountModel())
+    const result = getCurrentAccountAdapter()
+    expect(getSpy).toHaveBeenCalledWith('account')
+    expect(result).toEqual(account)
   })
 })
