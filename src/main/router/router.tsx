@@ -4,14 +4,14 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { makeLogin } from '@/main/factory/pages/login/login-factory'
 import { makeSignUp } from '@/main/factory/pages/signup/signup-factory'
 import { ApiContext } from '@/presentation/contexts'
-import { setCurrentAccountAdapter } from '@/main/adapters/current-account-adapter'
+import { setCurrentAccountAdapter, getCurrentAccountAdapter } from '@/main/adapters/current-account-adapter'
 
 const Router: React.FC = () => {
   return (
     <ApiContext.Provider
       value={{
         setCurrentAccount: setCurrentAccountAdapter,
-        getCurrentAccount: () => ({ accessToken: 'banana', name: 'banana' })
+        getCurrentAccount: getCurrentAccountAdapter
       }}
     >
       <BrowserRouter>
