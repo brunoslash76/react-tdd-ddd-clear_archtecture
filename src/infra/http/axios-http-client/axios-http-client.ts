@@ -1,4 +1,10 @@
-import { HttpPostParams, HttpResponse, HttpPostClient, HttpGetClient } from '@/data/protocols/http'
+import {
+  HttpPostParams,
+  HttpResponse,
+  HttpPostClient,
+  HttpGetClient,
+  HttpGetParams
+} from '@/data/protocols/http'
 import axios, { AxiosResponse } from 'axios'
 
 export class AxiosHttpClient implements HttpPostClient, HttpGetClient {
@@ -12,10 +18,10 @@ export class AxiosHttpClient implements HttpPostClient, HttpGetClient {
     return this.adapt(axiosResponse)
   }
 
-  async get (params: HttpPostParams): Promise<HttpResponse> {
+  async get (params: HttpGetParams): Promise<HttpResponse> {
     let axiosResponse: AxiosResponse
     try {
-      axiosResponse = await axios.get(params.url)
+      axiosResponse = await axios.get(params.url, { headers: params.headers })
     } catch (error) {
       axiosResponse = error.response
     }
