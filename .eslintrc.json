@@ -23,10 +23,13 @@
         "@typescript-eslint/no-floating-promises": "off",
         "@typescript-eslint/comma-spacing": "off",
         "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-namespace": "off",
         "@typescript-eslint/return-await": "off",
         "space-before-function-paren": "off",
         "react/jsx-uses-react": "error",
         "react/jsx-uses-vars": "error",
+        "import/export": "off",
+        "no-redeclare": "off",
         "no-tabs": "off"
     }
 }

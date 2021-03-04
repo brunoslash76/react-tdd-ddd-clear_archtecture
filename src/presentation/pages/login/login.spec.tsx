@@ -5,24 +5,22 @@ import { Login } from '@/presentation/pages'
 import {
   render,
   fireEvent,
-  cleanup,
   waitFor,
   screen
 } from '@testing-library/react'
 import {
   ValidationStub,
   AuthenticationSpy,
-  UpdateCurrentAccountMock,
   Helper
 } from '@/presentation/test'
 import faker from 'faker'
 import { InvalidCredentialsError } from '@/domain/errors'
 import { ApiContext } from '@/presentation/contexts'
-import { AccountModel } from '@/domain/models'
+import { Authentication } from '@/domain/usecases'
 
 type SutTypes = {
   authenticationSpy: AuthenticationSpy
-  setCurrentAccountMock: (account: AccountModel) => void
+  setCurrentAccountMock: (account: Authentication.Model) => void
 }
 
 type SutParams = {
