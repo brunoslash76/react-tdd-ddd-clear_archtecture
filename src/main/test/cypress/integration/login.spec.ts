@@ -1,16 +1,17 @@
 import faker from 'faker'
 import {
-  testHttpCallsCount,
   testInputStatus,
+  testMainError
+} from '../support/form-helpers'
+import {
+  testHttpCallsCount,
   testLocalStorageItem,
-  testMainError,
   testUrl
-} from '../support/form-helper'
+} from '../support/helpers'
 import {
   mockInvalidCredentialsError,
   mockUnexpectedError,
-  mockOk,
-  mockInvalidData
+  mockOk
 } from '../support/login-mocks'
 
 const populateFields = (): void => {
@@ -63,14 +64,6 @@ describe('Login', () => {
     mockUnexpectedError()
     simulateValidSubmit()
     cy.getByTestId('error-wrap')
-    testMainError('Algo de errado aconteceu. Tente novamente')
-    testUrl('/login')
-  })
-
-  it('Should present UnexpectedError if invalid data is returned', () => {
-    mockInvalidData()
-    cy.getByTestId('email').focus().type(faker.internet.email())
-    cy.getByTestId('password').focus().type(faker.random.alphaNumeric(5)).type('{enter}')
     testMainError('Algo de errado aconteceu. Tente novamente')
     testUrl('/login')
   })

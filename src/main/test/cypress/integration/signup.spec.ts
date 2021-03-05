@@ -1,14 +1,15 @@
 import faker from 'faker'
 import {
-  testHttpCallsCount,
   testInputStatus,
+  testMainError
+} from '../support/form-helpers'
+import {
+  testHttpCallsCount,
   testLocalStorageItem,
-  testMainError,
   testUrl
-} from '../support/form-helper'
+} from '../support/helpers'
 import {
   mockEmailInUseError,
-  mockInvalidData,
   mockUnexpectedError,
   mockOk
 } from '../support/signup-mocks'
@@ -78,13 +79,6 @@ describe('SignUp', () => {
     mockUnexpectedError()
     simulateValidSubmit()
     cy.getByTestId('error-wrap')
-    testMainError('Algo de errado aconteceu. Tente novamente')
-    testUrl('/signup')
-  })
-
-  it('Should present UnexpectedError if invalid data is returned', () => {
-    mockInvalidData()
-    simulateValidSubmit()
     testMainError('Algo de errado aconteceu. Tente novamente')
     testUrl('/signup')
   })
