@@ -100,7 +100,14 @@ const SingUp: React.FC<Props> = ({ validation, addAccount }: Props) => {
             placeholder='Confirme sua senha'
           />
           <SubmitButton text="Cadastrar"/>
-          <Link to="/login" replace data-testid="login-link" className={Styles.link}>Voltar para Login</Link>
+          <Link
+            to="/login"
+            replace
+            data-testid="login-link"
+            className={Styles.link}
+          >
+            Voltar para Login
+          </Link>
           <FormStatus />
         </form>
       </FormContext.Provider>
