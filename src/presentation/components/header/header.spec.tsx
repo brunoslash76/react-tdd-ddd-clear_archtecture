@@ -32,7 +32,7 @@ describe('Header Component', () => {
   test('Should call setCurrentAccount with null', () => {
     const { history, setCurrentAccountMock } = makeSut()
     fireEvent.click(screen.getByTestId('logout'))
-    expect(setCurrentAccountMock).toHaveBeenCalledWith(undefined)
+    expect(setCurrentAccountMock).toHaveBeenCalledWith(null)
     expect(history.location.pathname).toBe('/login')
   })
 
