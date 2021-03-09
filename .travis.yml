@@ -7,5 +7,5 @@ script:
 deploy:
   provider: heroku
   api_key: $HEROKU_API
-  app: fordev-react-bruno
+  app: fordevs-react-bruno
   skip_cleanup: true
