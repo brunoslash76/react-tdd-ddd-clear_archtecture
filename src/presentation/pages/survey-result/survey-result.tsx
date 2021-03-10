@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import FlipMove from 'react-flip-move'
 import { Footer, Header } from '@/presentation/components'
+import Loading from '@/presentation/components/loading/loading'
 import Styles from './survey-result-styles.scss'
-import Spinner from '@/presentation/components/spinner/spinner'
 
-const SurveyReseult: React.FC = () => {
+const SurveyResult: React.FC = () => {
   return (
     <div className={Styles.surveyResultWrap}>
       <Header />
@@ -33,16 +33,11 @@ const SurveyReseult: React.FC = () => {
           </li>
         </FlipMove>
         <button>Voltar</button>
-        <div className={Styles.loadingWrap}>
-          <div className={Styles.loading}>
-            <span>Aguarde...</span>
-            <Spinner isNegative={true}/>
-          </div>
-        </div>
+        {false && <Loading />}
       </div>
       <Footer />
     </div>
   )
 }
 
-export default SurveyReseult
+export default SurveyResult
