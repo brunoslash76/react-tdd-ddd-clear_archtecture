@@ -5,6 +5,12 @@
 	position: relative;
 	width: 40px;
   height: 40px;
+
+  &.negative {
+    div {
+      border-color: $white transparent transparent transparent;
+    }
+  }
   
   div {
     box-sizing: border-box;
@@ -13,7 +19,7 @@
     width: 40px;
     height: 40px;
     margin: 0px;
-    border: 4px solid $primaryLight;
+    border: 2px solid $primaryLight;
     border-radius: 50%;
     animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
     border-color: $primaryLight transparent transparent transparent;
