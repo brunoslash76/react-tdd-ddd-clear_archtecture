@@ -5,6 +5,7 @@ const path = /surveys/
 
 const mockUnexpectedError = (): void => Http.mockServerError(path, 'GET')
 const mockSuccess = (): void => Http.mockOk(path, 'GET', 'fx:survey-result')
+const mockAccessDeniedError = (): void => Http.mockUnauthorizedError(path)
 
 describe('Survey Result', () => {
   beforeEach(() => {
@@ -26,5 +27,11 @@ describe('Survey Result', () => {
     mockSuccess()
     cy.getByTestId('reload').click()
     cy.getByTestId('question').should('exist')
+  })
+
+  it('Should logout on AccessDeniedError', () => {
+    mockAccessDeniedError()
+    cy.visit('/surveys/any_id')
+    Helper.testUrl('/login')
   })
 })
