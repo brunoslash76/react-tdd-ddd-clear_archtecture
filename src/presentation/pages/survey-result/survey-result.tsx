@@ -3,12 +3,16 @@ import FlipMove from 'react-flip-move'
 import { LoadSurveyResult } from '@/domain/usecases'
 import { Calendar, Error, Footer, Header, Loading } from '@/presentation/components'
 import Styles from './survey-result-styles.scss'
+import { useErrorHandler } from '@/presentation/hooks'
 
 type Props = {
   loadSurveyResult: LoadSurveyResult
 }
 
 const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
+  const hadleError = useErrorHandler((error: Error) => {
+    setState(old => ({ ...old, surveyResult: null, error: error.message }))
+  })
   const [state, setState] = useState({
     isLoading: false,
     error: '',
@@ -18,7 +22,7 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
   useEffect(() => {
     loadSurveyResult.load()
       .then(surveyResult => setState(old => ({ ...old, surveyResult })))
-      .catch()
+      .catch(hadleError)
   }, [])
 
   return (
