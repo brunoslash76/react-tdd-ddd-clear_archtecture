@@ -4,6 +4,7 @@ import { Error, Footer, Header, Loading } from '@/presentation/components'
 import Styles from './survey-result-styles.scss'
 import { useErrorHandler } from '@/presentation/hooks'
 import { SurveyResultData } from '@/presentation/pages/survey-result/components'
+
 type Props = {
   loadSurveyResult: LoadSurveyResult
 }
