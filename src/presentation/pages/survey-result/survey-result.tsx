@@ -4,6 +4,7 @@ import { LoadSurveyResult } from '@/domain/usecases'
 import { Calendar, Error, Footer, Header, Loading } from '@/presentation/components'
 import Styles from './survey-result-styles.scss'
 import { useErrorHandler } from '@/presentation/hooks'
+import { useHistory } from 'react-router'
 
 type Props = {
   loadSurveyResult: LoadSurveyResult
@@ -21,6 +22,7 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
   })
 
   const reload = (): void => setState(old => ({ isLoading: false, surveyResult: null, error: '', reload: !old.reload }))
+  const { goBack } = useHistory()
 
   useEffect(() => {
     loadSurveyResult.load()
@@ -53,7 +55,7 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
                 </li>
               )}
             </FlipMove>
-            <button>Voltar</button>
+            <button data-testid="back-button" onClick={goBack}>Voltar</button>
           </>
         )}
         {state.isLoading && <Loading />}
