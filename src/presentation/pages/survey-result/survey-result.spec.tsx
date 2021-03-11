@@ -1,7 +1,7 @@
 import React from 'react'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory, MemoryHistory } from 'history'
-import { render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { SurveyResult } from '@/presentation/pages'
 import { ApiContext } from '@/presentation/contexts'
 import { LoadSurveyResultSpy, mockAccountModel, mockSurveyResultModel } from '@/domain/test'
@@ -95,14 +95,14 @@ describe('SurveyResult Component', () => {
     expect(history.location.pathname).toBe('/login')
   })
 
-  // test('Should call SurveyList on reload', async () => {
-  //   const loadSurveyResultSpy = new LoadSurveyResultSpy()
-  //   jest.spyOn(loadSurveyResultSpy, 'load').mockRejectedValueOnce(new UnexpectedError())
-  //   makeSut(loadSurveyResultSpy)
-  //   await waitFor(() => screen.getByRole('heading'))
-  //   expect(screen.queryByTestId('survey-list')).not.toBeInTheDocument()
-  //   fireEvent.click(screen.getByTestId('reload'))
-  //   expect(loadSurveyResultSpy.callsCount).toBe(1)
-  //   await waitFor(() => screen.getByRole('heading'))
-  // })
+  test('Should call LoadSurveyResult on reload', async () => {
+    const loadSurveyResultSpy = new LoadSurveyResultSpy()
+    jest.spyOn(loadSurveyResultSpy, 'load').mockRejectedValueOnce(new UnexpectedError())
+    makeSut(loadSurveyResultSpy)
+    await waitFor(() => screen.getByTestId('survey-result'))
+    expect(screen.queryByTestId('survey-list')).not.toBeInTheDocument()
+    fireEvent.click(screen.getByTestId('reload'))
+    expect(loadSurveyResultSpy.callsCount).toBe(1)
+    await waitFor(() => screen.getByRole('heading'))
+  })
 })
