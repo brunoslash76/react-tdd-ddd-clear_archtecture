@@ -55,8 +55,8 @@ describe('Survey Result', () => {
   })
 
   it('Should goto SurveyList on back button click', () => {
-    cy.visit('')
     mockSuccess()
+    cy.visit('')
     cy.visit('/surveys/any_id')
     cy.getByTestId('back-button').click()
     Helper.testUrl('/')
