@@ -2,13 +2,16 @@ import React from 'react'
 import { fireEvent, render, RenderResult } from '@testing-library/react'
 import faker from 'faker'
 import Input from './input'
-import Context from '@/presentation/contexts/form/form-context'
-
+import { RecoilRoot } from 'recoil'
 const makeSut = (fieldName: string): RenderResult => (
   render(
-    <Context.Provider value={{ state: {} }}>
-      <Input name={fieldName} />
-    </Context.Provider>
+    <RecoilRoot>
+      <Input
+        name={fieldName}
+        state={{}}
+        setState={null}
+      />
+    </RecoilRoot>
   )
 )
 
