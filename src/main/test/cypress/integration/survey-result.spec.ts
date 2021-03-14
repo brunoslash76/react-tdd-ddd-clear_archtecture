@@ -2,7 +2,7 @@ import * as Http from '../utils/http-mocks'
 import * as Helper from '../utils/helpers'
 
 const path = /surveys/
-const mockLoadSuccess = (): void => Http.mockOk(path, 'GET', 'fx:survey-result')
+const mockLoadSuccess = (): void => Http.mockOk(path, 'GET', 'fx:load-survey-result')
 
 describe('Survey Result', () => {
   beforeEach(() => {
@@ -72,7 +72,7 @@ describe('Survey Result', () => {
   describe('save', () => {
     const mockUnexpectedError = (): void => Http.mockServerError(path, 'PUT')
     const mockAccessDeniedError = (): void => Http.mockUnauthorizedError(path)
-
+    const mockSavedSuccess = (): void => Http.mockOk(path, 'GET', 'fx:save-survey-result')
     beforeEach(() => {
       cy.fixture('account').then(account => {
         Helper.setLocalStorageItem('account',account)
@@ -85,6 +85,31 @@ describe('Survey Result', () => {
       mockUnexpectedError()
       cy.get('li:nth-child(2').click()
       cy.getByTestId('error').should('contain.text', 'Algo de errado aconteceu. Tente novamente')
+    })
+
+    it('Should logout on AccessDeniedError', () => {
+      mockAccessDeniedError()
+      cy.get('li:nth-child(2)').click()
+      Helper.testUrl('/login')
+    })
+
+    it('Should present survey result', () => {
+      mockSavedSuccess()
+      cy.get('li:nth-child(2)').click()
+      cy.getByTestId('question').should('have.text', 'Question 8')
+      cy.getByTestId('day').should('have.text', '02')
+      cy.getByTestId('month').should('have.text', 'mai')
+      cy.getByTestId('year').should('have.text', '2018')
+      cy.get('li:nth-child(1)').then(li => {
+        assert.equal(li.find('[data-testid="answer"]').text(), 'any_answer')
+        assert.equal(li.find('[data-testid="percent"]').text(), '45%')
+        assert.equal(li.find('[data-testid="image"]').attr('src'), 'any_image')
+      })
+      cy.get('li:nth-child(2)').then(li => {
+        assert.equal(li.find('[data-testid="answer"]').text(), 'any_answer2')
+        assert.equal(li.find('[data-testid="percent"]').text(), '65%')
+        assert.notExists(li.find('[data-testid="image"]').attr('src'), 'any_image')
+      })
     })
   })
 })
