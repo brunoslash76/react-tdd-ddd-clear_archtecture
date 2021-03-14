@@ -1,12 +1,11 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useEffect } from 'react'
 import Styles from './login-styles.scss'
-import { LoginHeader, Footer } from '@/presentation/components'
+import { LoginHeader, Footer, currentAccountState } from '@/presentation/components'
 import { loginState, Input, SubmitButton } from '@/presentation/pages/login/components'
-import { ApiContext } from '@/presentation/contexts'
 import { Validation } from '@/presentation/protocols/validations'
 import { Authentication } from '@/domain/usecases'
 import { Link, useHistory } from 'react-router-dom'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
 import FormStatus from '@/presentation/components/form-status/form-status'
 
 type Props = {
@@ -15,12 +14,14 @@ type Props = {
 }
 
 const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
-  const { setCurrentAccount } = useContext(ApiContext)
+  const resetLoginState = useResetRecoilState(loginState)
+  const { setCurrentAccount } = useRecoilValue(currentAccountState)
   const history = useHistory()
   const [state, setState] = useRecoilState(loginState)
 
-  useEffect(() => { validate('email') }, [state.email])
-  useEffect(() => { validate('password') }, [state.password])
+  useEffect(() => resetLoginState(), [])
+  useEffect(() => validate('email'), [state.email])
+  useEffect(() => validate('password'), [state.password])
 
   const validate = (field: string): void => {
     const { email, password } = state

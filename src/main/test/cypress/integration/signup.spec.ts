@@ -1,13 +1,6 @@
 import faker from 'faker'
-import {
-  testInputStatus,
-  testMainError
-} from '../utils/form-helpers'
-import {
-  testHttpCallsCount,
-  testLocalStorageItem,
-  testUrl
-} from '../utils/helpers'
+import * as FormHelper from '../utils/form-helpers'
+import * as Helper from '../utils/helpers'
 import * as Http from '../utils/http-mocks'
 
 const path = /signup/
@@ -34,37 +27,45 @@ describe('SignUp', () => {
     cy.visit('signup')
   })
   it('Should load with correct initial state', () => {
-    testInputStatus('name', 'Campo obrigatório')
-    testInputStatus('email', 'Campo obrigatório')
-    testInputStatus('password', 'Campo obrigatório')
-    testInputStatus('passwordConfirmation', 'Campo obrigatório')
+    FormHelper.testInputStatus('name', 'Campo obrigatório')
+    FormHelper.testInputStatus('email', 'Campo obrigatório')
+    FormHelper.testInputStatus('password', 'Campo obrigatório')
+    FormHelper.testInputStatus('passwordConfirmation', 'Campo obrigatório')
     cy.getByTestId('submit').should('have.attr', 'disabled')
     cy.getByTestId('error-wrap').should('not.have.descendants')
   })
 
+  it('Should reset state on page load', () => {
+    cy.getByTestId('email').focus().type(faker.internet.email())
+    FormHelper.testInputStatus('email')
+    cy.getByTestId('signup-link').click()
+    cy.getByTestId('login-link').click()
+    FormHelper.testInputStatus('email', 'Campo obrigatório')
+  })
+
   it('Should present error state if form is invalid', () => {
     cy.getByTestId('name').focus().type(faker.random.alphaNumeric(3))
-    testInputStatus('name', 'Valor inválido')
+    FormHelper.testInputStatus('name', 'Valor inválido')
     cy.getByTestId('email').focus().type(faker.random.alphaNumeric(3))
-    testInputStatus('email', 'Valor inválido')
+    FormHelper.testInputStatus('email', 'Valor inválido')
     cy.getByTestId('password').focus().type(faker.random.alphaNumeric(3))
-    testInputStatus('password', 'Valor inválido')
+    FormHelper.testInputStatus('password', 'Valor inválido')
     cy.getByTestId('passwordConfirmation').focus().type(faker.random.alphaNumeric(4))
-    testInputStatus('passwordConfirmation', 'Valor inválido')
+    FormHelper.testInputStatus('passwordConfirmation', 'Valor inválido')
     cy.getByTestId('submit').should('have.attr', 'disabled')
     cy.getByTestId('error-wrap').should('not.have.descendants')
   })
 
   it('Should present valid state if form is valid', () => {
     cy.getByTestId('name').focus().type(faker.name.findName())
-    testInputStatus('name')
+    FormHelper.testInputStatus('name')
     cy.getByTestId('email').focus().type(faker.internet.email())
-    testInputStatus('email')
+    FormHelper.testInputStatus('email')
     const password = faker.random.alphaNumeric(5)
     cy.getByTestId('password').focus().type(password)
-    testInputStatus('password')
+    FormHelper.testInputStatus('password')
     cy.getByTestId('passwordConfirmation').focus().type(password)
-    testInputStatus('passwordConfirmation')
+    FormHelper.testInputStatus('passwordConfirmation')
     cy.getByTestId('submit').should('not.have.attr', 'disabled')
     cy.getByTestId('error-wrap').should('not.have.descendants')
   })
@@ -73,16 +74,16 @@ describe('SignUp', () => {
     mockEmailInUseError()
     simulateValidSubmit()
     cy.getByTestId('error-wrap')
-    testMainError('Esse e-mail já está em uso')
-    testUrl('/signup')
+    FormHelper.testMainError('Esse e-mail já está em uso')
+    Helper.testUrl('/signup')
   })
 
   it('Should present UnexpectedError on 400', () => {
     mockUnexpectedError()
     simulateValidSubmit()
     cy.getByTestId('error-wrap')
-    testMainError('Algo de errado aconteceu. Tente novamente')
-    testUrl('/signup')
+    FormHelper.testMainError('Algo de errado aconteceu. Tente novamente')
+    Helper.testUrl('/signup')
   })
 
   it('Should present save accessToken if valid credentials are provided', () => {
@@ -90,8 +91,8 @@ describe('SignUp', () => {
     simulateValidSubmit()
     cy.getByTestId('main-error').should('not.exist')
     cy.getByTestId('spinner').should('not.exist')
-    testUrl('/')
-    testLocalStorageItem('account')
+    Helper.testUrl('/')
+    Helper.testLocalStorageItem('account')
   })
 
   it('Should prevent multiple submits', () => {
@@ -99,12 +100,12 @@ describe('SignUp', () => {
     populateFields()
     cy.getByTestId('submit').dblclick()
     cy.wait('@request')
-    testHttpCallsCount(1)
+    Helper.testHttpCallsCount(1)
   })
 
   it('Should not call submit if form is invalid', () => {
     mockSuccess()
     cy.getByTestId('email').focus().type(faker.internet.email()).type('{enter}')
-    testHttpCallsCount(0)
+    Helper.testHttpCallsCount(0)
   })
 })
