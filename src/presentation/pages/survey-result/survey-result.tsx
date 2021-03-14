@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { LoadSurveyResult, SaveSurveyResult } from '@/domain/usecases'
 import { Error, Footer, Header, Loading } from '@/presentation/components'
 import Styles from './survey-result-styles.scss'
 import { useErrorHandler } from '@/presentation/hooks'
-import { SurveyResultData, SurveyResultContext } from '@/presentation/pages/survey-result/components'
+import { SurveyResultData, surveyResultState, onSurveyAnswerState } from '@/presentation/pages/survey-result/components'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 
 type Props = {
   loadSurveyResult: LoadSurveyResult
@@ -14,13 +15,8 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult, saveSurveyResult }: P
   const hadleError = useErrorHandler((error: Error) => {
     setState(old => ({ ...old, surveyResult: null, error: error.message, isLoading: false }))
   })
-  const [state, setState] = useState({
-    isLoading: false,
-    error: '',
-    surveyResult: null as LoadSurveyResult.Model,
-    reload: false
-  })
-
+  const [state, setState] = useRecoilState(surveyResultState)
+  const setOnAnswer = useSetRecoilState(onSurveyAnswerState)
   const onAnswer = (answer: string): void => {
     if (state.isLoading) return
     setState(old => ({ ...old, isLoading: true }))
@@ -36,16 +32,18 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult, saveSurveyResult }: P
       .catch(hadleError)
   }, [state.reload])
 
+  useEffect(() => {
+    setOnAnswer({ onAnswer })
+  }, [])
+
   return (
     <div className={Styles.surveyResultWrap}>
       <Header />
-      <SurveyResultContext.Provider value={{ onAnswer }}>
-        <div data-testid="survey-result" className={Styles.contentWrap}>
-          {state.surveyResult && <SurveyResultData surveyResult={state.surveyResult} /> }
-          {state.isLoading && <Loading />}
-          {state.error && <Error error={state.error} reload={reload}/>}
-        </div>
-      </SurveyResultContext.Provider>
+      <div data-testid="survey-result" className={Styles.contentWrap}>
+        {state.surveyResult && <SurveyResultData surveyResult={state.surveyResult} /> }
+        {state.isLoading && <Loading />}
+        {state.error && <Error error={state.error} reload={reload}/>}
+      </div>
       <Footer />
     </div>
   )

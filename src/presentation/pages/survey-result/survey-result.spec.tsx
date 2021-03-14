@@ -239,6 +239,7 @@ describe('SurveyResult Component', () => {
     const answersWrap = screen.queryAllByTestId('answer-wrap')
 
     fireEvent.click(answersWrap[1])
+    await waitFor(() => screen.getByTestId('survey-result'))
     fireEvent.click(answersWrap[1])
     await waitFor(() => screen.getByTestId('survey-result'))
 
