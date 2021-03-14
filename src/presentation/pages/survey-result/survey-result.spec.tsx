@@ -71,8 +71,8 @@ describe('SurveyResult Component', () => {
     expect(screen.getByTestId('question')).toHaveTextContent(surveyResult.question)
     expect(screen.getByTestId('answers').childElementCount).toBe(2)
     const answerWrap = screen.queryAllByTestId('answer-wrap')
-    expect(answerWrap[0]).toHaveClass('active')
-    expect(answerWrap[1]).not.toHaveClass('active')
+    // expect(answerWrap[0]).toHaveClass('active')
+    // expect(answerWrap[1]).not.toHaveClass('active')
     const images = screen.queryAllByTestId('image')
     expect(images[0]).toHaveAttribute('src', surveyResult.answers[0].image)
     expect(images[0]).toHaveAttribute('alt', surveyResult.answers[0].answer)
@@ -167,5 +167,78 @@ describe('SurveyResult Component', () => {
     await waitFor(() => screen.getByTestId('survey-result'))
     expect(setCurrentAccountMock).toHaveBeenCalledWith(null)
     expect(history.location.pathname).toBe('/login')
+  })
+
+  test('Should call LoadSurveyResult on reload', async () => {
+    const loadSurveyResultSpy = new LoadSurveyResultSpy()
+    jest.spyOn(loadSurveyResultSpy, 'load').mockRejectedValueOnce(new UnexpectedError())
+    makeSut({ loadSurveyResultSpy })
+    await waitFor(() => screen.getByTestId('survey-result'))
+
+    fireEvent.click(screen.getByTestId('reload'))
+
+    expect(loadSurveyResultSpy.callsCount).toBe(1)
+    await waitFor(() => screen.getByTestId('survey-result'))
+  })
+
+  test('Should goto SurveyList on back button click', async () => {
+    const { history } = makeSut()
+    await waitFor(() => screen.getByTestId('survey-result'))
+
+    fireEvent.click(screen.getByTestId('back-button'))
+
+    expect(history.location.pathname).toBe('/')
+  })
+
+  test('Should present SurveyResult data on SaveSurveyResult success', async () => {
+    const saveSurveyResultSpy = new SaveSurveyResultSpy()
+    const surveyResult = {
+      ...mockSurveyResultModel(),
+      date: new Date('2018-02-20T00:00:00')
+    }
+    saveSurveyResultSpy.surveyResult = surveyResult
+    makeSut({ saveSurveyResultSpy })
+    await waitFor(() => screen.getByTestId('survey-result'))
+    const answersWrap = screen.queryAllByTestId('answer-wrap')
+
+    fireEvent.click(answersWrap[1])
+    await waitFor(() => screen.getByTestId('survey-result'))
+
+    expect(screen.getByTestId('day')).toHaveTextContent('20')
+    expect(screen.getByTestId('month')).toHaveTextContent('fev')
+    expect(screen.getByTestId('year')).toHaveTextContent('2018')
+    expect(screen.getByTestId('question')).toHaveTextContent(surveyResult.question)
+    expect(screen.getByTestId('answers').childElementCount).toBe(2)
+    expect(answersWrap[0]).toHaveClass('active')
+    expect(answersWrap[1]).not.toHaveClass('active')
+    const images = screen.queryAllByTestId('image')
+    expect(images[0]).toHaveAttribute('src', surveyResult.answers[0].image)
+    expect(images[0]).toHaveAttribute('alt', surveyResult.answers[0].answer)
+    expect(images[1]).toBeFalsy()
+    const answers = screen.queryAllByTestId('answer')
+    expect(answers[0]).toHaveTextContent(surveyResult.answers[0].answer)
+    expect(answers[1]).toHaveTextContent(surveyResult.answers[1].answer)
+    const percents = screen.queryAllByTestId('percent')
+    expect(percents[0]).toHaveTextContent(`${surveyResult.answers[0].percent}%`)
+    expect(percents[1]).toHaveTextContent(`${surveyResult.answers[1].percent}%`)
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument()
+  })
+
+  test('Should prevent multiple answer click', async () => {
+    // const initialState = {
+    //   isLoading: true,
+    //   error: '',
+    //   surveyResult: null,
+    //   reload: false
+    // }
+    const { saveSurveyResultSpy } = makeSut()
+    await waitFor(() => screen.getByTestId('survey-result'))
+    const answersWrap = screen.queryAllByTestId('answer-wrap')
+
+    fireEvent.click(answersWrap[1])
+    fireEvent.click(answersWrap[1])
+    await waitFor(() => screen.getByTestId('survey-result'))
+
+    expect(saveSurveyResultSpy.callsCount).toBe(1)
   })
 })

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { SurveyResultAnswerModel } from '@/domain/models'
-import * as Styles from './answer-styles.scss'
 import { SurveyResultContext } from '@/presentation/pages/survey-result/components'
+import * as Styles from './answer-styles.scss'
 
 type Props = {
   answer: SurveyResultAnswerModel
@@ -14,6 +14,7 @@ const Answer: React.FC<Props> = ({ answer }: Props) => {
     if (event.currentTarget.classList.contains('active')) return
     onAnswer(answer.answer)
   }
+
   return (
     <li
       data-testid="answer-wrap"
